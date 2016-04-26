@@ -19,7 +19,6 @@ const tmpdir = "./testoutput"
 func cleanup() {
 	os.RemoveAll(tmpdir)
 	os.MkdirAll(tmpdir, 0775)
-	fmt.Printf("images available at %s\n", tmpdir)
 }
 
 // Write jpeg encoded byte array to disk
@@ -60,10 +59,10 @@ func TestJpg(t *testing.T) {
     srcPath := "file://testdata/image.jpg"
  
 	opts := []Options{
-		{Algo: WIDTH,  Quality: 92, Height: 2000,  Width: 150,  SharpenRadius:0.5, SharpenAmount:80},
+		{Algo: WIDTH,  Quality: 92, Height: 2000,  Width: 150,  SharpenRadius:1.0, SharpenAmount:200},
 		{Algo: WIDTH,  Quality: 20, Height: 2000,  Width: 300,  SharpenRadius:0.5, SharpenAmount:80},
 		{Algo: HEIGHT, Quality: 92, Height: 150,   Width: 2000, SharpenRadius:0.5, SharpenAmount:80},
-		{Algo: HEIGHT, Quality: 92, Height: 300,   Width: 2000, SharpenRadius:0.5, SharpenAmount:80},
+		{Algo: HEIGHT, Quality: 92, Height: 300,   Width: 200, SharpenRadius:0.5, SharpenAmount:80},
 		{Algo: SQUARE, Quality: 92, Height: 100,   Width: 100,  SharpenRadius:0.5, SharpenAmount:80},
 		{Algo: SQUARE, Quality: 92, Height: 300,   Width: 300,  SharpenRadius:0.5, SharpenAmount:80},
 	}

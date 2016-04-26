@@ -48,12 +48,26 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, error) {
                                                 
     result := C.ArionResize(inputOptions, resizeOptions)
     
-    // TODO: error checking
-    defer C.free(unsafe.Pointer(result.outputData))
+    outputData := unsafe.Pointer(result.outputData)
+    outputJson := unsafe.Pointer(result.resultJson)
+    outputError := unsafe.Pointer(result.errorMessage)
     
-    defer C.free(unsafe.Pointer(result.resultJson))
+    if outputData != nil {
+        defer C.free(outputData)
+    }
+
+    if outputJson != nil {
+        defer C.free(outputJson)
+    }
     
-    jpeg := C.GoBytes(unsafe.Pointer(result.outputData), result.outputSize)
+    if outputError != nil {
+        defer C.free(outputError)
+        
+        // TODO: use the actual output error
+        return nil, errEncoding
+    }
+
+    jpeg := C.GoBytes(outputData, result.outputSize)
     
     return jpeg, nil
 }
