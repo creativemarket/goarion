@@ -16,6 +16,8 @@ var (
 	errNoData              = errors.New("image data length is zero")
 	errInvalidSourceFormat = errors.New("invalid data source format")
 	errEncoding            = errors.New("error during encoding")
+    errInvalidHeight       = errors.New("provided height is invalid")
+    errInvalidWidth        = errors.New("provided width is invalid")
 )
 
 func ResizeFromFile(inputUrl string, options Options) ([]byte, error) {
