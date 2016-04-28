@@ -54,6 +54,8 @@ type Options struct {
 	Quality       int
 	SharpenRadius float64
 	SharpenAmount int
+    WatermarkUrl  string;
+    WatermarkAmount int;
 }
 
 func AlgoToString(a Algo) string {

@@ -8,34 +8,52 @@ package goarion
 //
 import "C"
 import (
-	"errors"
+    "errors"
     "unsafe"
 )
 
 var (
-	errNoData              = errors.New("image data length is zero")
-	errInvalidSourceFormat = errors.New("invalid data source format")
-	errEncoding            = errors.New("error during encoding")
+    errNoOutpuData         = errors.New("image data length is zero")
+    errInvalidSourceFormat = errors.New("invalid data source format")
+    errOperation           = errors.New("error running the operation")
+    errEmptyInputUrl       = errors.New("empty intput url")
     errInvalidHeight       = errors.New("provided height is invalid")
     errInvalidWidth        = errors.New("provided width is invalid")
+    errInvalidQuality      = errors.New("provided quality is invalid")
 )
 
 func ResizeFromFile(inputUrl string, options Options) ([]byte, error) {
     
-	cinputUrl := C.CString(inputUrl)
-	defer C.free(unsafe.Pointer(cinputUrl))
+    // if inputUrl == nil {        
+    //     return nil, errEmptyInputUrl
+    // }
+    
+    if options.Height <= 0 {
+        return nil, errInvalidHeight
+    }
+    
+    if options.Width <= 0 {
+        return nil, errInvalidWidth
+    }
+    
+    if options.Quality <= 0 {
+        return nil, errInvalidQuality
+    }
+    
+    cinputUrl := C.CString(inputUrl)
+    defer C.free(unsafe.Pointer(cinputUrl))
     
     inputOptions := C.struct_ArionInputOptions{correctOrientation: 1, inputUrl:cinputUrl}
 
     algo := C.CString(AlgoToString(options.Algo))
-	defer C.free(unsafe.Pointer(algo))
+    defer C.free(unsafe.Pointer(algo))
     
     gravity := C.CString(GravtiyToString(options.Gravity))
     defer C.free(unsafe.Pointer(gravity))
 
-    // Ability to save to file from Arion
-	// coutputUrl := C.CString(outputUrl)
-	// defer C.free(unsafe.Pointer(coutputUrl))
+    // Ability to save to file (to disk) from Arion
+    // coutputUrl := C.CString(outputUrl)
+    // defer C.free(unsafe.Pointer(coutputUrl))
 
     resizeOptions := C.struct_ArionResizeOptions{algo: algo, 
                                                 height: C.uint(options.Height), 
@@ -45,38 +63,38 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, error) {
                                                 sharpenRadius: C.float(options.SharpenRadius),
                                                 sharpenAmount: C.uint(options.SharpenAmount),
                                                 preserveMeta: C.uint(0)}
-                                                
+                                                // watermarkUrl: 
+                                                // watermarkAmount: }
+
+    // Run it!
     result := C.ArionResize(inputOptions, resizeOptions)
     
+    // Read back results
     outputData := unsafe.Pointer(result.outputData)
     outputJson := unsafe.Pointer(result.resultJson)
-    outputError := unsafe.Pointer(result.errorMessage)
+    returnCode := int(result.returnCode)
     
+    // If we got back output data make sure it gets freed
     if outputData != nil {
         defer C.free(outputData)
     }
 
+    // If we got back json make sure it gets freed
     if outputJson != nil {
         defer C.free(outputJson)
     }
-    
-    if outputError != nil {
-        defer C.free(outputError)
-        
-        // TODO: use the actual output error
-        return nil, errEncoding
+
+    // Now check the error code
+    if returnCode != 0 {
+        return nil, errOperation
+    }
+     
+    // We should have data, but we don't
+    if outputData == nil {
+        return nil, errNoOutpuData
     }
 
     jpeg := C.GoBytes(outputData, result.outputSize)
     
     return jpeg, nil
 }
-
-// func Resize(data []byte, options Options) ([]byte, error) {
-// 	if len(data) == 0 {
-// 		return nil, errNoData
-// 	}
-
-// 	// return resize(src, options)
-//     return nil, errInvalidSourceFormat
-// }
