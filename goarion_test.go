@@ -34,7 +34,7 @@ func imageTestHelper(t *testing.T, srcPath string, outputPrefix string, opts Opt
 
         // Perform the resize operation and make sure there are no errors
         // Data will be jpeg encoded
-        data, err := ResizeFromFile(srcPath, opts)
+        data, _, err := ResizeFromFile(srcPath, opts)
     
     assert.NoError(err)
 
@@ -68,7 +68,7 @@ func TestJpg(t *testing.T) {
         }
 
         for _, opt := range opts {
-        data, err := ResizeFromFile(srcPath, opt)
+        data, _, err := ResizeFromFile(srcPath, opt)
         
         assert.NoError(err)
         

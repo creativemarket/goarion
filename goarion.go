@@ -22,34 +22,31 @@ var (
     errInvalidQuality      = errors.New("provided quality is invalid")
 )
 
-func ResizeFromFile(inputUrl string, options Options) ([]byte, error) {
+func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
     
     // if inputUrl == nil {        
     //     return nil, errEmptyInputUrl
     // }
     
+    // Set a default JSON response...
+    json := "{\"result\":false,\"error_message\":\"Unknown error\"}"
+    
     if options.Height <= 0 {
-        return nil, errInvalidHeight
+        return nil, json, errInvalidHeight
     }
     
     if options.Width <= 0 {
-        return nil, errInvalidWidth
+        return nil, json, errInvalidWidth
     }
     
     if options.Quality <= 0 {
-        return nil, errInvalidQuality
+        return nil, json, errInvalidQuality
     }
     
-    cinputUrl := C.CString(inputUrl)
-    defer C.free(unsafe.Pointer(cinputUrl))
-    
+    cinputUrl    := C.CString(inputUrl)
     inputOptions := C.struct_ArionInputOptions{correctOrientation: 1, inputUrl:cinputUrl}
-
-    algo := C.CString(AlgoToString(options.Algo))
-    defer C.free(unsafe.Pointer(algo))
-    
-    gravity := C.CString(GravtiyToString(options.Gravity))
-    defer C.free(unsafe.Pointer(gravity))
+    algo         := C.CString(AlgoToString(options.Algo))
+    gravity      := C.CString(GravtiyToString(options.Gravity))
 
     // Ability to save to file (to disk) from Arion
     // coutputUrl := C.CString(outputUrl)
@@ -69,32 +66,50 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, error) {
     // Run it!
     result := C.ArionResize(inputOptions, resizeOptions)
     
+    // Cleanup
+    defer C.free(unsafe.Pointer(cinputUrl))                                            
+    defer C.free(unsafe.Pointer(algo))                                            
+    defer C.free(unsafe.Pointer(gravity))
+    
     // Read back results
     outputData := unsafe.Pointer(result.outputData)
+    outputSize := int(result.outputSize)
     outputJson := unsafe.Pointer(result.resultJson)
     returnCode := int(result.returnCode)
-    
-    // If we got back output data make sure it gets freed
-    if outputData != nil {
-        defer C.free(outputData)
-    }
 
     // If we got back json make sure it gets freed
     if outputJson != nil {
+        json = C.GoString(result.resultJson)
         defer C.free(outputJson)
     }
 
     // Now check the error code
     if returnCode != 0 {
-        return nil, errOperation
+        
+        // If we got back output data make sure it gets freed
+        if outputData != nil {
+            defer C.free(outputData)
+        }
+
+        return nil, json, errOperation
     }
      
     // We should have data, but we don't
     if outputData == nil {
-        return nil, errNoOutpuData
+        return nil, json, errNoOutpuData
     }
 
-    jpeg := C.GoBytes(outputData, result.outputSize)
+    // This works, but creates an extra copy...
+    // jpeg := C.GoBytes(outputData, result.outputSize)
+    // If we got back output data make sure it gets freed
+    // if outputData != nil {
+    //     defer C.free(outputData)
+    // }
     
-    return jpeg, nil
+    // Avoid the extra copy 
+    // See https://github.com/golang/go/wiki/cgo#turning-c-arrays-into-go-slices
+    // TODO: does this need to be freed or will go manage it?
+    jpeg := (*[1 << 30]byte)(outputData)[:outputSize:outputSize]
+    
+    return jpeg, json, nil
 }

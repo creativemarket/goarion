@@ -34,7 +34,7 @@ func main() {
     defer p.Stop()
     times := 10000
     workers := runtime.GOMAXPROCS(0)
-    filename := "file://../testdata/image.jpg"
+    filename := "file://testdata/image.jpg"
     size := "200x200,400x180,800x600"
     algo := "fill"
     quality := 92
@@ -96,7 +96,7 @@ func main() {
             defer wg.Done()
             for opt := range ch {
                 images.Time(func() {
-                    _, err := goarion.ResizeFromFile(filename, opt)
+                    _, _, err := goarion.ResizeFromFile(filename, opt)
                     if err != nil {
                         log.Fatal(err)
                     }
