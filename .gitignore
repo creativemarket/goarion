@@ -1,1 +1,5 @@
 .DS_Store
+bench/bench
+bench/mem.pprof
+mem.pprof
+testoutput/
