@@ -78,7 +78,7 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
   outputSize := int(result.outputSize)
   outputJson := unsafe.Pointer(result.resultJson)
   returnCode := int(result.returnCode)
-
+  
   // If we got back json make sure it gets freed
   if outputJson != nil {
     json = C.GoString(result.resultJson)
@@ -110,7 +110,7 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
   
   // Avoid the extra copy 
   // See https://github.com/golang/go/wiki/cgo#turning-c-arrays-into-go-slices
-  // TODO: does this need to be freed or will go manage it?
+  // TODO: does this need to be freed or will Go use garbage collection?
   jpeg := (*[1 << 30]byte)(outputData)[:outputSize:outputSize]
   
   return jpeg, json, nil

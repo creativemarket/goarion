@@ -9,19 +9,24 @@ import (
   "os"
   "path"
   "testing"
+  "strings"
+  "encoding/json"
 
   "github.com/stretchr/testify/assert"
 )
 
 const tmpdir = "./testoutput"
 
+//------------------------------------------------------------------------------
 // Setup the temp directory for a new test run
+//------------------------------------------------------------------------------
 func cleanup() {
   os.RemoveAll(tmpdir)
   os.MkdirAll(tmpdir, 0775)
 }
-
+//------------------------------------------------------------------------------
 // Write jpeg encoded byte array to disk
+//------------------------------------------------------------------------------
 func dumpImage(filename string, data []byte) {
   err := ioutil.WriteFile(path.Join(tmpdir, filename+".jpg"), data, 0665)
   if err != nil {
@@ -29,6 +34,9 @@ func dumpImage(filename string, data []byte) {
   }
 }
 
+//------------------------------------------------------------------------------
+// Helper for resizing image and saving it to disk
+//------------------------------------------------------------------------------
 func imageTestHelper(t *testing.T, srcPath string, outputPrefix string, opts Options) {
   assert := assert.New(t)
 
@@ -37,7 +45,7 @@ func imageTestHelper(t *testing.T, srcPath string, outputPrefix string, opts Opt
   data, _, err := ResizeFromFile(srcPath, opts)
 
   assert.NoError(err)
-
+  
   destName := fmt.Sprintf("%s%dx%d_%s", outputPrefix, opts.Width, opts.Height, AlgoToString(opts.Algo))
 
   // Write the resized image back to disk
@@ -52,6 +60,32 @@ func imageTestHelper(t *testing.T, srcPath string, outputPrefix string, opts Opt
   assert.Equal(opts.Height, im.Height)
 }
 
+//------------------------------------------------------------------------------
+// Make sure that the JSON output indicates an error with expected message
+//------------------------------------------------------------------------------
+func jsonErrorHelper(t *testing.T, jsonString string, expectedErrorMessage string) {
+  
+  assert := assert.New(t)
+  
+  type Message struct {
+    Error_message string
+    Result bool
+  }
+  
+  var m Message
+
+  dec := json.NewDecoder(strings.NewReader(jsonString))
+  
+  decodeError := dec.Decode(&m)
+  
+  assert.NoError(decodeError)
+  assert.Equal(m.Result, false)
+  assert.Equal(m.Error_message, expectedErrorMessage)
+}
+
+//------------------------------------------------------------------------------
+// Generic test case
+//------------------------------------------------------------------------------
 func TestJpg(t *testing.T) {
   cleanup()
   assert := assert.New(t)
@@ -82,6 +116,40 @@ func TestJpg(t *testing.T) {
   }
 }
 
+//------------------------------------------------------------------------------
+// Test invalid inputs
+//------------------------------------------------------------------------------
+func TestInvalidInput(t *testing.T) {
+  assert := assert.New(t)
+  
+  // Options are valid, but missing file:// prefix
+  srcPath := "testdata/100x100_square.png"
+
+  opts := Options{
+    Algo:    WIDTH,
+    Width:   50,
+    Height:  50,
+    Quality: 92,
+  }
+
+  _, jsonString, err := ResizeFromFile(srcPath, opts)
+  
+  assert.Error(err)
+  
+  jsonErrorHelper(t, jsonString, "Unsupported input source. Use 'file://' prefix")
+  
+  // Improper file path
+  srcPath = "file://testdata/100x100_square"
+  
+  _, jsonString, err = ResizeFromFile(srcPath, opts)
+  
+  jsonErrorHelper(t, jsonString, "Failed to extract image")
+
+}
+
+//------------------------------------------------------------------------------
+// Basic fill operation
+//------------------------------------------------------------------------------
 func Test100x100(t *testing.T) {
     
   srcPath := "file://testdata/100x100_square.png"
@@ -99,8 +167,10 @@ func Test100x100(t *testing.T) {
   imageTestHelper(t, srcPath, outputPrefix, opts)
 
 }
-
-// Here we have a tall source image and we are always cropping a tall portion at the center of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a tall portion
+// at the center of the image
+//------------------------------------------------------------------------------
 func Test100x200TallCenter(t *testing.T) {
 
   srcPath := "file://testdata/100x200_tall_center.png"
@@ -138,7 +208,10 @@ func Test100x200TallCenter(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a tall portion at the left of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a tall portion
+// at the left of the image
+//------------------------------------------------------------------------------
 func Test100x200TallLeft(t *testing.T) {
 
   srcPath := "file://testdata/100x200_tall_left.png"
@@ -176,7 +249,10 @@ func Test100x200TallLeft(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a tall portion at the right of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a tall portion
+// at the right of the image
+//------------------------------------------------------------------------------
 func Test100x200TallRight(t *testing.T) {
 
   srcPath := "file://testdata/100x200_tall_right.png"
@@ -214,7 +290,10 @@ func Test100x200TallRight(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a wide portion at the bottom of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a wide portion
+// at the bottom of the image
+//------------------------------------------------------------------------------
 func Test100x200WideBottom(t *testing.T) {
 
   srcPath := "file://testdata/100x200_wide_bottom.png"
@@ -252,7 +331,10 @@ func Test100x200WideBottom(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a wide portion at the bottom of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a wide portion at
+// the bottom of the image
+//------------------------------------------------------------------------------
 func Test100x200WideCenter(t *testing.T) {
 
   srcPath := "file://testdata/100x200_wide_center.png"
@@ -289,8 +371,10 @@ func Test100x200WideCenter(t *testing.T) {
   imageTestHelper(t, srcPath, outputPrefix, opts)
 
 }
-
-// Here we have a tall source image and we are always cropping a wide portion at the top of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a wide portion at
+// the top of the image
+//------------------------------------------------------------------------------
 func Test100x200WideTop(t *testing.T) {
 
   srcPath := "file://testdata/100x200_wide_top.png"
@@ -327,8 +411,10 @@ func Test100x200WideTop(t *testing.T) {
   imageTestHelper(t, srcPath, outputPrefix, opts)
 
 }
-
-// Here we have a wide source image and we are always cropping a tall portion at the center of the image
+//------------------------------------------------------------------------------
+// Here we have a wide source image and we are always cropping a tall portion at
+// the center of the image
+//------------------------------------------------------------------------------
 func Test200x100TallCenter(t *testing.T) {
 
   srcPath := "file://testdata/200x100_tall_center.png"
@@ -366,7 +452,10 @@ func Test200x100TallCenter(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a tall portion at the left of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a tall portion at
+// the left of the image
+//------------------------------------------------------------------------------
 func Test200x100TallLeft(t *testing.T) {
 
   srcPath := "file://testdata/200x100_tall_left.png"
@@ -404,7 +493,10 @@ func Test200x100TallLeft(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a tall portion at the right of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a tall portion at
+// the right of the image
+//------------------------------------------------------------------------------
 func Test200x100TallRight(t *testing.T) {
 
   srcPath := "file://testdata/200x100_tall_right.png"
@@ -442,7 +534,10 @@ func Test200x100TallRight(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a wide portion at the bottom of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a wide portion at
+// the bottom of the image
+//------------------------------------------------------------------------------
 func Test200x100WideBottom(t *testing.T) {
 
   srcPath := "file://testdata/200x100_wide_bottom.png"
@@ -480,7 +575,10 @@ func Test200x100WideBottom(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a wide portion at the bottom of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a wide portion at
+// the bottom of the image
+//------------------------------------------------------------------------------
 func Test200x100WideCenter(t *testing.T) {
 
   srcPath := "file://testdata/200x100_wide_center.png"
@@ -518,7 +616,10 @@ func Test200x100WideCenter(t *testing.T) {
 
 }
 
-// Here we have a tall source image and we are always cropping a wide portion at the top of the image
+//------------------------------------------------------------------------------
+// Here we have a tall source image and we are always cropping a wide portion at
+// the top of the image
+//------------------------------------------------------------------------------
 func Test200x100WideTop(t *testing.T) {
 
   srcPath := "file://testdata/200x100_wide_top.png"
