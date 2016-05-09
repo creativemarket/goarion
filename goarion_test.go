@@ -92,6 +92,7 @@ func TestJpg(t *testing.T) {
  
   srcUrl := "file://testdata/image.jpg"
   watermarkUrl := "file://testdata/watermark.png"
+  watermark2Url := "file://testdata/watermark2.png"
  
   opts := []Options{
     {Algo: WIDTH,  Quality: 92, Height: 2000,  Width: 150,  SharpenRadius:1.0, SharpenAmount:200},
@@ -101,6 +102,7 @@ func TestJpg(t *testing.T) {
     {Algo: SQUARE, Quality: 92, Height: 100,   Width: 100,  SharpenRadius:0.5, SharpenAmount:80},
     {Algo: SQUARE, Quality: 92, Height: 300,   Width: 300,  SharpenRadius:0.5, SharpenAmount:80},
     {Algo: SQUARE, Quality: 92, Height: 400,   Width: 400,  SharpenRadius:0.5, SharpenAmount:80, WatermarkUrl:watermarkUrl, WatermarkAmount: 0.4},
+    {Algo: FILL,   Quality: 92, Height: 600,   Width: 400,  SharpenRadius:0.5, SharpenAmount:80, WatermarkUrl:watermark2Url, WatermarkMin: 0.4, WatermarkMax: 0.6, WatermarkType: ADAPTIVE},
   }
 
   for _, opt := range opts {

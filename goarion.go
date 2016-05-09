@@ -24,9 +24,9 @@ var (
 
 func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
   
-  // if inputUrl == nil {    
-  //   return nil, errEmptyInputUrl
-  // }
+//   if inputUrl == nil {    
+//     return nil, errEmptyInputUrl
+//   }
   
   // Set a default JSON response...
   json := "{\"result\":false,\"error_message\":\"Unknown error\"}"
@@ -48,20 +48,24 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
   algo            := C.CString(AlgoToString(options.Algo))
   gravity         := C.CString(GravtiyToString(options.Gravity))
   watermarkUrl    := C.CString(options.WatermarkUrl)
-
+  watermarkType   := C.CString(WatermarkTypeToString(options.WatermarkType))
+  
   // Ability to save to file (to disk) from Arion
   // coutputUrl := C.CString(outputUrl)
   // defer C.free(unsafe.Pointer(coutputUrl))
   
-  resizeOptions := C.struct_ArionResizeOptions{algo: algo, 
-                                               height: C.uint(options.Height), 
-                                               width:  C.uint(options.Width),
-                                               gravity: gravity,
-                                               quality: C.uint(options.Quality),
-                                               sharpenRadius: C.float(options.SharpenRadius),
-                                               sharpenAmount: C.uint(options.SharpenAmount),
-                                               preserveMeta: C.uint(0),
-                                               watermarkUrl: watermarkUrl,
+  resizeOptions := C.struct_ArionResizeOptions{algo:            algo, 
+                                               height:          C.uint(options.Height), 
+                                               width:           C.uint(options.Width),
+                                               gravity:         gravity,
+                                               quality:         C.uint(options.Quality),
+                                               sharpenRadius:   C.float(options.SharpenRadius),
+                                               sharpenAmount:   C.uint(options.SharpenAmount),
+                                               preserveMeta:    C.uint(0),
+                                               watermarkUrl:    watermarkUrl,
+                                               watermarkType:   watermarkType,
+                                               watermarkMin:    C.float(options.WatermarkMin),
+                                               watermarkMax:    C.float(options.WatermarkMax),
                                                watermarkAmount: C.float(options.WatermarkAmount)}
 
   // Run it!
@@ -72,6 +76,7 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
   defer C.free(unsafe.Pointer(algo))
   defer C.free(unsafe.Pointer(gravity))
   defer C.free(unsafe.Pointer(watermarkUrl))
+  defer C.free(unsafe.Pointer(watermarkType))
   
   // Read back results
   outputData := unsafe.Pointer(result.outputData)
