@@ -104,3 +104,12 @@ func WatermarkTypeToString(w WatermarkType) string {
             return "standard"
     }
 }
+
+func StringToWatermarkType(s string) WatermarkType {
+    switch s {
+        case "adaptive":
+            return ADAPTIVE
+        default:
+            return STANDARD
+    }
+}

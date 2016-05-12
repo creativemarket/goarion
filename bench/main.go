@@ -36,7 +36,10 @@ func main() {
     workers := runtime.GOMAXPROCS(0)
     filename := "file://../testdata/image.jpg"
     watermark := ""
+    watermarkType := "standard"
     watermarkAmount := 0.10
+    watermarkMin := 0.1
+    watermarkMax := 0.5
     sharpenRadius := 0.5
     sharpen := 0
     size := "200x200,400x180,800x600"
@@ -47,6 +50,7 @@ func main() {
     flag.IntVar(&workers, "workers", workers, "number of workers")
     flag.StringVar(&filename, "file", filename, "input image")
     flag.StringVar(&watermark, "watermark", watermark, "watermark image")
+    flag.StringVar(&watermarkType, "watermarkType", watermarkType, "watermark type")
     flag.StringVar(&size, "size", size, "comma separated list of sizes")
     flag.StringVar(&algo, "algo", algo, "comma separated list of algos")
     flag.IntVar(&sharpen, "sharpen", sharpen, "amount to sharpen")
@@ -81,6 +85,7 @@ func main() {
             
             // Set a default value
             a := goarion.StringToAlgo(algoString)
+            wmt := goarion.StringToWatermarkType(watermarkType)
 
             opts = append(opts, goarion.Options{Algo: a, 
                                                 Quality: quality, 
@@ -89,6 +94,9 @@ func main() {
                                                 SharpenRadius: sharpenRadius,
                                                 SharpenAmount: sharpen,
                                                 WatermarkUrl: watermark,
+                                                WatermarkType: wmt,
+                                                WatermarkMin: watermarkMin,
+                                                WatermarkMax: watermarkMax,
                                                 WatermarkAmount: watermarkAmount})
         }
     }

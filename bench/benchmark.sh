@@ -44,13 +44,25 @@ echo '--------------------------------------------------------------------------
 go run main.go -file file://../testdata/image.jpg -size 100x100,640x480,1024x768 -algo fill -sharpen 80 -watermark file://../testdata/watermark.png
 
 
+# Fill with sharpening and adaptive watermark
+echo
+echo '------------------------------------------------------------------------------------------'
+echo
+echo ' Benchmark 5: Fill resize type with 3 output sizes. Sharpening and adaptive watermark'
+echo
+echo '------------------------------------------------------------------------------------------'
+
+go run main.go -file file://../testdata/image.jpg -size 100x100,640x480,1024x768 -algo fill -sharpen 80 -watermark file://../testdata/watermark.png -watermarkType adaptive
+
+
 # Fill with sharpening and watermark, small thumbnail
 echo
 echo '------------------------------------------------------------------------------------------'
 echo
-echo ' Benchmark 5: Fill resize type with one small output size. Sharpening and watermark'
+echo ' Benchmark 6: Fill resize type with one small output size. Sharpening and watermark'
 echo
 echo '------------------------------------------------------------------------------------------'
 
 go run main.go -file file://../testdata/image.jpg -size 100x100 -algo fill -sharpen 80 -watermark file://../testdata/watermark.png -times 2000
+
 
