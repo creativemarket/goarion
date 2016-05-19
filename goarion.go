@@ -13,15 +13,17 @@ import (
 )
 
 var (
-  errNoOutpuData         = errors.New("image data length is zero")
-  errInvalidSourceFormat = errors.New("invalid data source format")
-  errOperation           = errors.New("error running the operation")
-  errEmptyInputUrl       = errors.New("empty intput url")
-  errInvalidHeight       = errors.New("provided height is invalid")
-  errInvalidWidth        = errors.New("provided width is invalid")
-  errInvalidQuality      = errors.New("provided quality is invalid")
+  errNoOutpuData         = errors.New("Image data length is zero")
+  errInvalidSourceFormat = errors.New("Invalid data source format")
+  errOperation           = errors.New("Error running the operation")
+  errEmptyInputUrl       = errors.New("Empty intput url")
+  errInvalidHeight       = errors.New("Provided height is invalid")
+  errInvalidWidth        = errors.New("Provided width is invalid")
+  errInvalidQuality      = errors.New("Provided quality is invalid")
 )
 
+// Performs a resize operation given an input url
+// On success this will return JPEG data in a byte array
 func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
   
 //   if inputUrl == nil {    
@@ -52,6 +54,7 @@ func ResizeFromFile(inputUrl string, options Options) ([]byte, string, error) {
   
   // Ability to save to file (to disk) from Arion
   // coutputUrl := C.CString(outputUrl)
+  // If used, put this after call to resize!
   // defer C.free(unsafe.Pointer(coutputUrl))
   
   resizeOptions := C.struct_ArionResizeOptions{algo:            algo, 
