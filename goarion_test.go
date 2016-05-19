@@ -90,9 +90,9 @@ func TestJpg(t *testing.T) {
   cleanup()
   assert := assert.New(t)
  
-  srcUrl := "file://testdata/image.jpg"
-  watermarkUrl := "file://testdata/watermark.png"
-  watermark2Url := "file://testdata/watermark2.png"
+  srcUrl := "testdata/image.jpg"
+  watermarkUrl := "testdata/watermark.png"
+  watermark2Url := "testdata/watermark2.png"
  
   opts := []Options{
     {Algo: WIDTH,  Quality: 92, Height: 2000,  Width: 150,  SharpenRadius:1.0, SharpenAmount:200},
@@ -124,8 +124,7 @@ func TestJpg(t *testing.T) {
 func TestInvalidInput(t *testing.T) {
   assert := assert.New(t)
   
-  // Options are valid, but missing file:// prefix
-  srcPath := "testdata/100x100_square.png"
+  srcPath := "testdata/does_not_exist.png"
 
   opts := Options{
     Algo:    WIDTH,
@@ -133,17 +132,10 @@ func TestInvalidInput(t *testing.T) {
     Height:  50,
     Quality: 92,
   }
-
+  
   _, jsonString, err := ResizeFromFile(srcPath, opts)
   
   assert.Error(err)
-  
-  jsonErrorHelper(t, jsonString, "Unsupported input source. Use 'file://' prefix")
-  
-  // Improper file path
-  srcPath = "file://testdata/100x100_square"
-  
-  _, jsonString, err = ResizeFromFile(srcPath, opts)
   
   jsonErrorHelper(t, jsonString, "Failed to extract image")
 
@@ -154,7 +146,7 @@ func TestInvalidInput(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test100x100(t *testing.T) {
     
-  srcPath := "file://testdata/100x100_square.png"
+  srcPath := "testdata/100x100_square.png"
 
   outputPrefix := "100x100_square_to_"
 
@@ -175,7 +167,7 @@ func Test100x100(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test100x200TallCenter(t *testing.T) {
 
-  srcPath := "file://testdata/100x200_tall_center.png"
+  srcPath := "testdata/100x200_tall_center.png"
   outputPrefix := "100x200_tall_center_to_"
 
   // Just a crop, take the center
@@ -216,7 +208,7 @@ func Test100x200TallCenter(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test100x200TallLeft(t *testing.T) {
 
-  srcPath := "file://testdata/100x200_tall_left.png"
+  srcPath := "testdata/100x200_tall_left.png"
   outputPrefix := "100x200_tall_left_to_"
 
   // Just a crop, take the left
@@ -257,7 +249,7 @@ func Test100x200TallLeft(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test100x200TallRight(t *testing.T) {
 
-  srcPath := "file://testdata/100x200_tall_right.png"
+  srcPath := "testdata/100x200_tall_right.png"
   outputPrefix := "100x200_tall_right_to_"
 
   // Just a crop, take the right
@@ -298,7 +290,7 @@ func Test100x200TallRight(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test100x200WideBottom(t *testing.T) {
 
-  srcPath := "file://testdata/100x200_wide_bottom.png"
+  srcPath := "testdata/100x200_wide_bottom.png"
   outputPrefix := "100x200_wide_bottom_to_"
 
   // Just a crop, take the bottom
@@ -339,7 +331,7 @@ func Test100x200WideBottom(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test100x200WideCenter(t *testing.T) {
 
-  srcPath := "file://testdata/100x200_wide_center.png"
+  srcPath := "testdata/100x200_wide_center.png"
   outputPrefix := "100x200_wide_center_to_"
 
   // Just a crop, take the bottom
@@ -379,7 +371,7 @@ func Test100x200WideCenter(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test100x200WideTop(t *testing.T) {
 
-  srcPath := "file://testdata/100x200_wide_top.png"
+  srcPath := "testdata/100x200_wide_top.png"
   outputPrefix := "100x200_wide_top_to_"
 
   // Just a crop, take the top
@@ -419,7 +411,7 @@ func Test100x200WideTop(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test200x100TallCenter(t *testing.T) {
 
-  srcPath := "file://testdata/200x100_tall_center.png"
+  srcPath := "testdata/200x100_tall_center.png"
   outputPrefix := "200x100_tall_center_to_"
 
   // Just a crop, take the center
@@ -460,7 +452,7 @@ func Test200x100TallCenter(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test200x100TallLeft(t *testing.T) {
 
-  srcPath := "file://testdata/200x100_tall_left.png"
+  srcPath := "testdata/200x100_tall_left.png"
   outputPrefix := "200x100_tall_left_to_"
 
   // Just a crop, take the left
@@ -501,7 +493,7 @@ func Test200x100TallLeft(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test200x100TallRight(t *testing.T) {
 
-  srcPath := "file://testdata/200x100_tall_right.png"
+  srcPath := "testdata/200x100_tall_right.png"
   outputPrefix := "200x100_tall_right_to_"
 
   // Just a crop, take the right
@@ -542,7 +534,7 @@ func Test200x100TallRight(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test200x100WideBottom(t *testing.T) {
 
-  srcPath := "file://testdata/200x100_wide_bottom.png"
+  srcPath := "testdata/200x100_wide_bottom.png"
   outputPrefix := "200x100_wide_bottom_to_"
 
   // Just a crop, take the bottom
@@ -583,7 +575,7 @@ func Test200x100WideBottom(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test200x100WideCenter(t *testing.T) {
 
-  srcPath := "file://testdata/200x100_wide_center.png"
+  srcPath := "testdata/200x100_wide_center.png"
   outputPrefix := "200x100_wide_center_to_"
 
   // Just a crop, take the bottom
@@ -624,7 +616,7 @@ func Test200x100WideCenter(t *testing.T) {
 //------------------------------------------------------------------------------
 func Test200x100WideTop(t *testing.T) {
 
-  srcPath := "file://testdata/200x100_wide_top.png"
+  srcPath := "testdata/200x100_wide_top.png"
   outputPrefix := "200x100_wide_top_to_"
 
   // Just a crop, take the top
