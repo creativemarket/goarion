@@ -4,7 +4,7 @@ image metadata extraction library.
 
 While Arion library provides a powerful CLI and C++ library, Goarion supplements that functionality by allowing for
 quick and easy service creation.  Goarion is built with performance in mind by providing multi-threaded support
-(see [bench](blob/master/bench/main.go)).
+(see [bench](bench/main.go)).
 
 **Example use cases**
 * On-the-fly image resize/watermarking API
