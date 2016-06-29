@@ -23,10 +23,10 @@ var (
 
 // ResizeFromFile Performs a resize operation given an input url
 // On success this will return JPEG data in a byte array
-func ResizeFromFile(inputURL string, options Options) ([]byte, string, error) {
+func ResizeFromFile(inputURL string, options Options) (jpeg []byte, json string, err error) {
 
 	// Set a default JSON response...
-	json := "{\"result\":false,\"error_message\":\"Unknown error\"}"
+	json = `{"result":false,"error_message":"Unknown error"}`
 
 	if options.Height <= 0 {
 		return nil, json, errInvalidHeight
@@ -114,7 +114,7 @@ func ResizeFromFile(inputURL string, options Options) ([]byte, string, error) {
 	// Avoid the extra copy
 	// See https://github.com/golang/go/wiki/cgo#turning-c-arrays-into-go-slices
 	// TODO: does this need to be freed or will Go use garbage collection?
-	jpeg := (*[1 << 30]byte)(outputData)[:outputSize:outputSize]
+	jpeg = (*[1 << 30]byte)(outputData)[:outputSize:outputSize]
 
 	return jpeg, json, nil
 }
