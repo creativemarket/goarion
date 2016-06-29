@@ -105,23 +105,23 @@ func main() {
     if optionsCount == 0 {
         log.Fatal("you must provide at least one size")
     }
-    
+
     log.Printf("%d different options, run each %d times for a total of %d operations", optionsCount, times, optionsCount*times)
     for _, opt := range opts {
         log.Printf("%+v", opt)
     }
 
     go func() {
-        for _ = range time.Tick(1e9) {
+        for _ = range time.Tick(time.Second) {
             printStats()
         }
     }()
 
     wg := new(sync.WaitGroup)
     ch := make(chan goarion.Options, workers)
+    wg.Add(workers)
 
     for i := 0; i < workers; i++ {
-        wg.Add(1)
         go func() {
             defer wg.Done()
             for opt := range ch {
