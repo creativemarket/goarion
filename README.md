@@ -13,7 +13,14 @@ quick and easy Go integration.  Goarion is intended for creating microservices a
 This project was inspired by the [T-REZ](https://github.com/DAddYE/trez) library.  
 
 ## Benchmark
-Below are a few illustrative benchmarks of Goarion from start to finish (reading input image -> generating final JPEG) on a 2.5 GHz Intel Core i7 MacBook Pro (Mid 2015).
+Goarion comes with a handy benchmarking tool
+```
+cd bench
+go build
+./benchmark.sh
+```
+
+Below are a few illustrative benchmarks of Goarion from start to finish (reading input image -> generating final JPEG) on a 2.5 GHz Intel Core i7 MacBook Pro (Mid 2015) (see [raw results](/wiki/benchmarks/2.5-GHz-Intel-Core-i7-MacBook-Pro-Mid-2015.txt)).
 
 **Basic resizing**
 
