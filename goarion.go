@@ -113,8 +113,18 @@ func ResizeFromFile(inputURL string, options Options) (jpeg []byte, json string,
 
 	// Avoid the extra copy
 	// See https://github.com/golang/go/wiki/cgo#turning-c-arrays-into-go-slices
-	// TODO: does this need to be freed or will Go use garbage collection?
+	// IMPORTANT: this needs to be freed using c because Go garbage collection
+	//            will not handle this
+	// SEE: FreeJpeg()
 	jpeg = (*[1 << 30]byte)(outputData)[:outputSize:outputSize]
 
 	return jpeg, json, nil
+}
+
+// FreeJpeg Frees memory allocated for jpeg. This is here as a helper
+// function to avoid cluttering code and to allow for compilation in tests
+func FreeJpeg(jpeg []byte) {
+	if jpeg != nil {
+		C.free(unsafe.Pointer(&jpeg[0]))
+	}
 }

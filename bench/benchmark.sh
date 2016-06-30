@@ -8,7 +8,7 @@ echo ' Benchmark 1: Three resize types on 3 output sizes. No sharpening / no wat
 echo
 echo '------------------------------------------------------------------------------------------'
 
-go run main.go -file file://../testdata/image.jpg -size 100x100,640x480,1024x768 -algo fill,width,height -times 500
+go run main.go -file file://../testdata/image.jpg -size 100x100,640x480,1024x768 -algo fill,width,height -times 10000
 
 
 # Baseline fill operation

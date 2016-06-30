@@ -43,22 +43,25 @@ func imageTestHelper(t *testing.T, srcPath string, outputPrefix string, opts Opt
 
 	// Perform the resize operation and make sure there are no errors
 	// Data will be jpeg encoded
-	data, _, err := ResizeFromFile(srcPath, opts)
+	jpeg, _, err := ResizeFromFile(srcPath, opts)
 
 	assert.NoError(err)
 
 	destName := fmt.Sprintf("%s%dx%d_%s", outputPrefix, opts.Width, opts.Height, AlgoToString(opts.Algo))
 
 	// Write the resized image back to disk
-	dumpImage(destName, data)
+	dumpImage(destName, jpeg)
 
 	// Read back the resized image
-	im, _, err := image.DecodeConfig(bytes.NewReader(data))
+	im, _, err := image.DecodeConfig(bytes.NewReader(jpeg))
 
 	// Make sure the resized image looks good
 	assert.NoError(err)
 	assert.Equal(opts.Width, im.Width)
 	assert.Equal(opts.Height, im.Height)
+
+	// Important: we must free this c allocated memory
+	FreeJpeg(jpeg)
 }
 
 //------------------------------------------------------------------------------
@@ -107,15 +110,17 @@ func TestJpg(t *testing.T) {
 	}
 
 	for _, opt := range opts {
-		data, _, err := ResizeFromFile(srcUrl, opt)
+		jpeg, _, err := ResizeFromFile(srcUrl, opt)
 
 		assert.NoError(err)
 
 		outputName := fmt.Sprintf("image_jpg_to_%dx%d_%s", opt.Width, opt.Height, AlgoToString(opt.Algo))
 
-		dumpImage(outputName, data)
-		_, _, err = image.DecodeConfig(bytes.NewReader(data))
+		dumpImage(outputName, jpeg)
+		_, _, err = image.DecodeConfig(bytes.NewReader(jpeg))
 		assert.NoError(err)
+
+		FreeJpeg(jpeg)
 	}
 }
 
@@ -134,11 +139,14 @@ func TestInvalidInput(t *testing.T) {
 		Quality: 92,
 	}
 
-	_, jsonString, err := ResizeFromFile(srcPath, opts)
+	jpeg, jsonString, err := ResizeFromFile(srcPath, opts)
 
 	assert.Error(err)
 
 	jsonErrorHelper(t, jsonString, "Failed to extract image")
+
+	// jpeg should be nil here, but this will not hurt
+	FreeJpeg(jpeg)
 
 }
 
