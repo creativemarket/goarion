@@ -93,7 +93,7 @@ func main() {
                                                 Height: h, 
                                                 SharpenRadius: sharpenRadius,
                                                 SharpenAmount: sharpen,
-                                                WatermarkUrl: watermark,
+                                                WatermarkURL: watermark,
                                                 WatermarkType: wmt,
                                                 WatermarkMin: watermarkMin,
                                                 WatermarkMax: watermarkMax,
