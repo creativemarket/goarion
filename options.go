@@ -5,6 +5,13 @@ import (
 	"strings"
 )
 
+type ImageType int
+
+const (
+	JPEG ImageType = iota
+	PNG
+)
+
 type Gravity int
 
 const (
@@ -62,6 +69,7 @@ func (wt WatermarkType) String() string {
 }
 
 type Options struct {
+	ImageType       ImageType
 	Width           int
 	Height          int
 	Algo            Algo

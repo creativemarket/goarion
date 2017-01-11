@@ -41,7 +41,7 @@ func ResizeFromFile(inputURL string, options Options) (jpeg []byte, json string,
 	}
 
 	cinputURL := C.CString(inputURL)
-	inputOptions := C.struct_ArionInputOptions{correctOrientation: 1, inputUrl: cinputURL}
+	inputOptions := C.struct_ArionInputOptions{correctOrientation: 1, inputUrl: cinputURL, outputFormat: C.uint(options.ImageType)}
 	algo := C.CString(AlgoToString(options.Algo))
 	gravity := C.CString(GravtiyToString(options.Gravity))
 	watermarkURL := C.CString(options.WatermarkURL)
