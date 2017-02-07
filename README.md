@@ -58,28 +58,55 @@ Below are a few illustrative benchmarks of Goarion from start to finish (reading
 | rate      | 113.3 ops/second |
 | count     | 3000 |
 
-Installation
-Install Go if needed
+## Installation
+Install Go if you haven't already
 ```bash
 sudo apt install golang-go
 ```
-Make sure to set your Go path:
+Make sure your Go path is set
 ```bash
 vim ~/.bashrc
-# Add this to the file 
 export GOPATH=~/code/go
+source ~/.bashrc
 ```
-Get the code
+Create the project directory structure and clone the repo
 ```bash
 cd $GOPATH
 mkdir -p src/github.com/filitchp
+cd src/github.com/filitchp
 git clone git@github.com:filitchp/goarion.git
 ```
-Satisfy Arion dependency by following the steps here: https://github.com/snapwire-media/arion#installation
+NOTE: before building Goarion you have to install the Arion library by following the steps here: https://github.com/snapwire-media/arion#installation
 
-Satisfy Go dependencies
+Satisfy Go dependencies (this will recursively install them using the Go standard directory structure)
 ```bash
 cd goarion
 go get ./...
 ```
 
+###Running the benchmark
+Build the benchmark (this shows sample usage of the library)
+```bash
+cd bench
+go build
+```
+The following script benchmarks a few different operations and serves as an example of various Goarion operations
+```bash
+./benchmark.sh
+```
+
+###Running test cases
+```bash
+cd $GOPATH/src/github.com/filitchp/goarion
+go test
+```
+If Go complains about the package stretchr/testify missing you can install it manually with
+```bash
+go get github.com/stretchr/testify
+```
+
+You should see the following
+```
+PASS
+ok  	github.com/filitchp/goarion	1.131s
+```
