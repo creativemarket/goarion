@@ -12,51 +12,39 @@ quick and easy Go integration.  Goarion is intended for creating microservices a
 
 This project was inspired by the [T-REZ](https://github.com/DAddYE/trez) library.  
 
-## Benchmark
-Goarion comes with a handy benchmarking tool
-```
-cd bench
-go build
-./benchmark.sh
-```
+## Performance
 
-Below are a few illustrative benchmarks of Goarion from start to finish (reading input image -> generating final JPEG) on a 2.5 GHz Intel Core i7 MacBook Pro (Mid 2015) (see [raw results](https://raw.githubusercontent.com/wiki/filitchp/goarion/benchmarks/2.5-GHz-Intel-Core-i7-MacBook-Pro-Mid-2015.txt)).
+Below are a few illustrative benchmarks of Goarion from start to finish (reading input image -> generating final JPEG).   (see [raw results](https://raw.githubusercontent.com/wiki/filitchp/goarion/benchmarks/2.5-GHz-Intel-Core-i7-MacBook-Pro-Mid-2015.txt)).
 
-**Basic resizing**
+**Hardware:** 2.5 GHz Intel Core i7 MacBook Pro (Mid 2015) <br>
+**Cores:** 4 physcial cores, 8 logical cores <br>
+**OS:** MacOS X El Capitan <br>
 
-| Stat | Time |
-|-----------|---------|
-| mean      | 54.07 ms |
-| min       | 28.94 ms |
-| max       | 123.51 ms |
-| %99       | 104.92 ms |
-| stdDev    | 16.31 ms |
-| rate      | 148.2 ops/second |
-| count     | 4500 |
+| Stat      | Resize        | Resize + Sharpen |  Resize + Sharpen + Watermark |
+|-----------|---------------|------------------|-------------------------------|
+| mean      | 54.07 ms      | 65.81 ms         | 70.83 ms |
+| min       | 28.94 ms      | 30.66 ms         | 32.73 ms |
+| max       | 123.51 ms     | 174.79 ms        | 195.96 ms |
+| %99       | 104.92 ms     | 128.32 ms        |  134.39 ms |
+| stdDev    | 16.31 ms      | 25.143 ms        | 27.72 ms |
+| rate      | 148.2 ops/sec | 119.0 ops/sec    | 113.3 ops/second |
+| count     | 4500          | 3000             | 3000 |
 
-**Resizing + Sharpening**
 
-| Stat | Time |
-|-----------|---------|
-| mean      | 65.81 ms |
-| min       | 30.66 ms |
-| max       | 174.79 ms |
-| %99       | 128.32 ms |
-| stdDev    | 25.143 ms |
-| rate      | 119.0 ops/second |
-| count     | 3000 |
+**Hardware:** Intel Xeon CPU E5-2698 v4 @ 2.20GHz <br>
+**Cores:** 20 physcial cores, 40 logical cores <br>
+**OS:** Ubuntu Xenial 16.04 <br>
 
-**Resizing + Sharpening + Adaptive Watermark**
-     
-| Stat | Time |
-|-----------|---------|
-| mean      | 70.83 ms |
-| min       | 32.73 ms |
-| max       | 195.96 ms |
-| %99       | 134.39 ms |
-| stdDev    | 27.72 ms |
-| rate      | 113.3 ops/second |
-| count     | 3000 |
+| Stat      | Resize        | Resize + Sharpen |  Resize + Sharpen + Watermark |
+|-----------|---------------|------------------|-------------------------------|
+| mean      | 49.77 ms      | 61.16 ms         | 67.88 ms |
+| min       | 17.95 ms      | 18.32 ms         | 20.62 ms |
+| max       | 331.81 ms     | 292.40 ms        | 200.48 ms |
+| %99       | 112.12 ms     | 143.85 ms        | 138.77 ms |
+| stdDev    | 22.72 ms      | 29.00 ms         | 32.37 ms |
+| rate      | 810.1 ops/sec | 668.9 ops/sec    | 572.7 ops/second |
+| count     | 90000         | 30000            | 30000 |
+
 
 ## Installation
 Install Go if you haven't already
