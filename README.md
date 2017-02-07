@@ -47,13 +47,15 @@ Below are a few illustrative benchmarks of Goarion from start to finish (reading
 
 
 ## Installation
-Install Go if you haven't already
+Installation assumes Ubuntu-based system. 
+Install Go if you haven't already (for other OSs see https://golang.org/doc/install)
 ```bash
 sudo apt install golang-go
 ```
 Make sure your Go path is set
 ```bash
 vim ~/.bashrc
+# Add this line to you .bashrc (~/.bash_profile on MacOS X)
 export GOPATH=~/code/go
 source ~/.bashrc
 ```
@@ -64,7 +66,7 @@ mkdir -p src/github.com/filitchp
 cd src/github.com/filitchp
 git clone git@github.com:filitchp/goarion.git
 ```
-NOTE: before building Goarion you have to install the Arion library by following the steps here: https://github.com/snapwire-media/arion#installation
+NOTE: before building Goarion you have to install the Arion C++ library by following the steps here: https://github.com/snapwire-media/arion#installation
 
 Satisfy Go dependencies (this will recursively install them using the Go standard directory structure)
 ```bash
