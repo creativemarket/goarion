@@ -47,7 +47,7 @@ Below are a few illustrative benchmarks of Goarion from start to finish (reading
 
 
 ## Installation
-Installation assumes Ubuntu-based system. 
+Installation assumes Ubuntu-based system, but Goarion has been tested on MacOS X as well and install is very similar.<br> 
 Install Go if you haven't already (for other OSs see https://golang.org/doc/install)
 ```bash
 sudo apt install golang-go
