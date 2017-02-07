@@ -17,7 +17,7 @@ This project was inspired by the [T-REZ](https://github.com/DAddYE/trez) library
 Below are a few illustrative benchmarks of Goarion from start to finish (reading input image -> generating final JPEG).   (see [raw results](https://raw.githubusercontent.com/wiki/filitchp/goarion/benchmarks/2.5-GHz-Intel-Core-i7-MacBook-Pro-Mid-2015.txt)).
 
 **Hardware:** 2.5 GHz Intel Core i7 MacBook Pro (Mid 2015) <br>
-**Cores:** 4 physcial cores, 8 logical cores <br>
+**Cores:** 4 physical cores, 8 logical cores <br>
 **OS:** MacOS X El Capitan <br>
 
 | Stat      | Resize        | Resize + Sharpen |  Resize + Sharpen + Watermark |
@@ -32,7 +32,7 @@ Below are a few illustrative benchmarks of Goarion from start to finish (reading
 
 
 **Hardware:** Intel Xeon CPU E5-2698 v4 @ 2.20GHz <br>
-**Cores:** 20 physcial cores, 40 logical cores <br>
+**Cores:** 20 physical cores, 40 logical cores <br>
 **OS:** Ubuntu Xenial 16.04 <br>
 
 | Stat      | Resize        | Resize + Sharpen |  Resize + Sharpen + Watermark |
