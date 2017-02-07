@@ -57,4 +57,29 @@ Below are a few illustrative benchmarks of Goarion from start to finish (reading
 | stdDev    | 27.72 ms |
 | rate      | 113.3 ops/second |
 | count     | 3000 |
-   
+
+Installation
+Install Go if needed
+```bash
+sudo apt install golang-go
+```
+Make sure to set your Go path:
+```bash
+vim ~/.bashrc
+# Add this to the file 
+export GOPATH=~/code/go
+```
+Get the code
+```bash
+cd $GOPATH
+mkdir -p src/github.com/filitchp
+git clone git@github.com:filitchp/goarion.git
+```
+Satisfy Arion dependency by following the steps here: https://github.com/snapwire-media/arion#installation
+
+Satisfy Go dependencies
+```bash
+cd goarion
+go get ./...
+```
+
