@@ -47,7 +47,9 @@ Below are a few illustrative benchmarks of Goarion from start to finish (reading
 
 
 ## Installation
-Installation assumes Ubuntu-based system, but Goarion has been tested on MacOS X as well and installation is very similar.<br> 
+Installation assumes Ubuntu-based system, but Goarion has been tested on MacOS X as well and installation is very similar.
+
+
 Install Go if you haven't already (for other OSs see https://golang.org/doc/install)
 ```bash
 sudo apt install golang-go
@@ -80,7 +82,7 @@ Build the benchmark (this shows sample usage of the library)
 cd bench
 go build
 ```
-The following script benchmarks a few different operations and serves as an example of various Goarion operations
+The following script benchmarks a few different operations and serves as an example of various use cases
 ```bash
 ./benchmark.sh
 ```
@@ -90,12 +92,12 @@ The following script benchmarks a few different operations and serves as an exam
 cd $GOPATH/src/github.com/filitchp/goarion
 go test
 ```
-If Go complains about the package stretchr/testify missing you can install it manually with
+If Go complains about not being able to find `stretchr/testify` you can install it manually with
 ```bash
 go get github.com/stretchr/testify
 ```
 
-You should see the following
+You should see the following after running `go test`
 ```
 PASS
 ok  	github.com/filitchp/goarion	1.131s
