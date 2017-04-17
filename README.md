@@ -76,7 +76,8 @@ cd goarion
 go get ./...
 ```
 
-###Running the benchmark
+### Running the benchmark
+
 Build the benchmark (this shows sample usage of the library)
 ```bash
 cd bench
@@ -87,7 +88,8 @@ The following script benchmarks a few different operations and serves as an exam
 ./benchmark.sh
 ```
 
-###Running test cases
+### Running test cases
+
 ```bash
 cd $GOPATH/src/github.com/filitchp/goarion
 go test
