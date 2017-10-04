@@ -1,5 +1,5 @@
 # Goarion
-Goarion is a Go wrapper for [Arion](https://github.com/snapwire-media/arion), a fast thumbnail creation and 
+Goarion is a Go wrapper for [Arion](https://github.com/creativemarket/arion), a fast thumbnail creation and 
 image metadata extraction library. 
 
 While Arion provides a powerful CLI and C++ library, Goarion supplements its functionality by allowing for
@@ -68,7 +68,7 @@ mkdir -p src/github.com/creativemarket
 cd src/github.com/creativemarket
 git clone git@github.com:creativemarket/goarion.git
 ```
-NOTE: before building Goarion you have to install the Arion library by following the steps here: https://github.com/snapwire-media/arion#installation
+NOTE: before building Goarion you have to install the Arion library by following the steps here: https://github.com/creativemarket/arion#installation
 
 Satisfy Go dependencies (this will recursively install them using the Go standard directory structure)
 ```bash
