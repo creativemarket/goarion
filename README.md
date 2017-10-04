@@ -14,7 +14,7 @@ This project was inspired by the [T-REZ](https://github.com/DAddYE/trez) library
 
 ## Performance
 
-Below are a few illustrative benchmarks of Goarion from start to finish (reading input image -> generating final JPEG).   (see [raw results](https://raw.githubusercontent.com/wiki/filitchp/goarion/benchmarks/2.5-GHz-Intel-Core-i7-MacBook-Pro-Mid-2015.txt)).
+Below are a few illustrative benchmarks of Goarion from start to finish (reading input image -> generating final JPEG).   (see [raw results](https://raw.githubusercontent.com/wiki/creativemarket/goarion/benchmarks/2.5-GHz-Intel-Core-i7-MacBook-Pro-Mid-2015.txt)).
 
 **Hardware:** 2.5 GHz Intel Core i7 MacBook Pro (Mid 2015) <br>
 **Cores:** 4 physical cores, 8 logical cores <br>
@@ -64,9 +64,9 @@ source ~/.bashrc
 Create the project directory structure and clone the repo
 ```bash
 cd $GOPATH
-mkdir -p src/github.com/filitchp
-cd src/github.com/filitchp
-git clone git@github.com:filitchp/goarion.git
+mkdir -p src/github.com/creativemarket
+cd src/github.com/creativemarket
+git clone git@github.com:creativemarket/goarion.git
 ```
 NOTE: before building Goarion you have to install the Arion library by following the steps here: https://github.com/snapwire-media/arion#installation
 
@@ -91,7 +91,7 @@ The following script benchmarks a few different operations and serves as an exam
 ### Running test cases
 
 ```bash
-cd $GOPATH/src/github.com/filitchp/goarion
+cd $GOPATH/src/github.com/creativemarket/goarion
 go test
 ```
 If Go complains about not being able to find `stretchr/testify` you can install it manually with
@@ -102,5 +102,5 @@ go get github.com/stretchr/testify
 You should see the following after running `go test`
 ```
 PASS
-ok  	github.com/filitchp/goarion	1.131s
+ok  	github.com/creativemarket/goarion	1.131s
 ```
