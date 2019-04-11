@@ -2,14 +2,12 @@ package goarion
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"image"
 	_ "image/jpeg"
 	"io/ioutil"
 	"os"
 	"path"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -43,7 +41,7 @@ func imageTestHelper(t *testing.T, srcPath string, outputPrefix string, opts Opt
 
 	// Perform the resize operation and make sure there are no errors
 	// Data will be jpeg encoded
-	jpeg, _, err := ResizeFromFile(srcPath, opts)
+	jpeg, err := ResizeFromFile(srcPath, opts)
 
 	assert.NoError(err)
 
@@ -62,29 +60,6 @@ func imageTestHelper(t *testing.T, srcPath string, outputPrefix string, opts Opt
 
 	// Important: we must free this c allocated memory
 	FreeJpeg(jpeg)
-}
-
-//------------------------------------------------------------------------------
-// Make sure that the JSON output indicates an error with expected message
-//------------------------------------------------------------------------------
-func jsonErrorHelper(t *testing.T, jsonString string, expectedErrorMessage string) {
-
-	assert := assert.New(t)
-
-	type Message struct {
-		Error_message string
-		Result        bool
-	}
-
-	var m Message
-
-	dec := json.NewDecoder(strings.NewReader(jsonString))
-
-	decodeError := dec.Decode(&m)
-
-	assert.NoError(decodeError)
-	assert.Equal(m.Result, false)
-	assert.Equal(m.Error_message, expectedErrorMessage)
 }
 
 //------------------------------------------------------------------------------
@@ -110,7 +85,7 @@ func TestJpg(t *testing.T) {
 	}
 
 	for _, opt := range opts {
-		jpeg, _, err := ResizeFromFile(srcUrl, opt)
+		jpeg, err := ResizeFromFile(srcUrl, opt)
 
 		assert.NoError(err)
 
@@ -142,8 +117,6 @@ func TestInvalidInput(t *testing.T) {
 	jpeg, jsonString, err := ResizeFromFile(srcPath, opts)
 
 	assert.Error(err)
-
-	jsonErrorHelper(t, jsonString, "Failed to extract image")
 
 	// jpeg should be nil here, but this will not hurt
 	FreeJpeg(jpeg)

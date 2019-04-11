@@ -23,21 +23,18 @@ var (
 
 // ResizeFromFile Performs a resize operation given an input url
 // On success this will return JPEG data in a byte array
-func ResizeFromFile(inputURL string, options Options) (jpeg []byte, json string, err error) {
-
-	// Set a default JSON response...
-	json = `{"result":false,"error_message":"Unknown error"}`
+func ResizeFromFile(inputURL string, options Options) (jpeg []byte, err error) {
 
 	if options.Height <= 0 {
-		return nil, json, errInvalidHeight
+		return nil, errInvalidHeight
 	}
 
 	if options.Width <= 0 {
-		return nil, json, errInvalidWidth
+		return nil, errInvalidWidth
 	}
 
 	if options.Quality <= 0 {
-		return nil, json, errInvalidQuality
+		return nil, errInvalidQuality
 	}
 
 	cinputURL := C.CString(inputURL)
@@ -79,14 +76,7 @@ func ResizeFromFile(inputURL string, options Options) (jpeg []byte, json string,
 	// Read back results
 	outputData := unsafe.Pointer(result.outputData)
 	outputSize := int(result.outputSize)
-	outputJSON := unsafe.Pointer(result.resultJson)
 	returnCode := int(result.returnCode)
-
-	// If we got back json make sure it gets freed
-	if outputJSON != nil {
-		json = C.GoString(result.resultJson)
-		defer C.free(outputJSON)
-	}
 
 	// Now check the error code
 	if returnCode != 0 {
@@ -96,12 +86,12 @@ func ResizeFromFile(inputURL string, options Options) (jpeg []byte, json string,
 			defer C.free(outputData)
 		}
 
-		return nil, json, errOperation
+		return nil, errOperation
 	}
 
 	// We should have data, but we don't
 	if outputData == nil {
-		return nil, json, errNoOutpuData
+		return nil, errNoOutpuData
 	}
 
 	// This works, but creates an extra copy...
@@ -118,7 +108,7 @@ func ResizeFromFile(inputURL string, options Options) (jpeg []byte, json string,
 	// SEE: FreeJpeg()
 	jpeg = (*[1 << 30]byte)(outputData)[:outputSize:outputSize]
 
-	return jpeg, json, nil
+	return jpeg, nil
 }
 
 // FreeJpeg Frees memory allocated for jpeg. This is here as a helper
