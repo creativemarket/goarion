@@ -7,9 +7,12 @@ import (
 
 type ImageType int
 
+// These must be kept in sync with the defines in arion/carion.h
 const (
 	JPEG ImageType = iota
 	PNG
+	JP2
+	WEBP
 )
 
 type Gravity int
