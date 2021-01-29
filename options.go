@@ -13,6 +13,7 @@ const (
 	PNG
 	JP2
 	WEBP
+	AVIF
 )
 
 type Gravity int
